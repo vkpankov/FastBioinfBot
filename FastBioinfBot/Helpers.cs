@@ -13,11 +13,10 @@ namespace FastBioinfBot
 {
     public static class Helpers
     {
-        private static readonly string connectionString = "DefaultEndpointsProtocol=https;AccountName=bioinfbotstorage;AccountKey=sRS+UBWKb9CTR3HbkjfSlsWM79LItMYkRTxs+fFbb2ytUT+5vxyweU2bRMua0AOsaqxj7NdOWTWax3keyEREdQ==;EndpointSuffix=core.windows.net";
+        private static string connectionString = "DefaultEndpointsProtocol=https;AccountName=bioinfbotstorage;AccountKey=sRS+UBWKb9CTR3HbkjfSlsWM79LItMYkRTxs+fFbb2ytUT+5vxyweU2bRMua0AOsaqxj7NdOWTWax3keyEREdQ==;EndpointSuffix=core.windows.net";
 
         public static async Task<string> UploadFileAsync(ITurnContext turnContext, CancellationToken cancellationToken, string conversationId, string fileName, string contentType)
         {
-
 
 
             var connector = turnContext.TurnState.Get<IConnectorClient>() as ConnectorClient;
