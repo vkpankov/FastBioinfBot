@@ -46,7 +46,7 @@ namespace FastBioinfBot.Dialogs
                 new PromptOptions
                 {
 
-                    Prompt = MessageFactory.Text("Please choose input data type"),
+                    Prompt = MessageFactory.Text("Please choose input data type (default - paired end)"),
                     Choices = ChoiceFactory.ToChoices(new List<string> { "Paired end", "Single end" }),
                 }, cancellationToken);
         }
@@ -56,7 +56,7 @@ namespace FastBioinfBot.Dialogs
             var inputParams = (TrimmomaticInputParams)stepContext.Values["TrimmomaticParams"];
             inputParams.Mode = ((FoundChoice)stepContext.Result).Value;
 
-            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Please enter leading trim size") };
+            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Please enter leading trim size (default: 3)") };
 
             // Ask the user to enter their age.
             return await stepContext.PromptAsync("LeadingPromt", promptOptions, cancellationToken);
@@ -67,7 +67,7 @@ namespace FastBioinfBot.Dialogs
             var inputParams = (TrimmomaticInputParams)stepContext.Values["TrimmomaticParams"];
             inputParams.Leading = (int)stepContext.Result;
 
-            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Please enter trailing trim size") };
+            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Please enter trailing trim size (default: 3)") };
 
             // Ask the user to enter their age.
             return await stepContext.PromptAsync("TrailingPromt", promptOptions, cancellationToken);
@@ -78,7 +78,7 @@ namespace FastBioinfBot.Dialogs
             var inputParams = (TrimmomaticInputParams)stepContext.Values["TrimmomaticParams"];
             inputParams.Trailing = (int)stepContext.Result;
 
-            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Please enter min length of reads") };
+            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Please enter min length of reads (default - 32)") };
 
             // Ask the user to enter their age.
             return await stepContext.PromptAsync("MinLenPromt", promptOptions, cancellationToken);
@@ -150,15 +150,17 @@ namespace FastBioinfBot.Dialogs
             };
             reply.Attachments.Add(attachment);
 
-            attachmentUri = await Helpers.UploadFileAsync(context, cancellationToken, context.Activity.Id, "reverse_paired.7z", "application/zip");
-            attachment = new Attachment()
+            if (File.Exists("reverse_paired.7z"))
             {
-                ContentType = "application/zip",
-                Name = "Trimmed reverse reads",
-                ContentUrl = attachmentUri
-            };
-            reply.Attachments.Add(attachment);
-
+                attachmentUri = await Helpers.UploadFileAsync(context, cancellationToken, context.Activity.Id, "reverse_paired.7z", "application/zip");
+                attachment = new Attachment()
+                {
+                    ContentType = "application/zip",
+                    Name = "Trimmed reverse reads",
+                    ContentUrl = attachmentUri
+                };
+                reply.Attachments.Add(attachment);
+            }
             return reply;
         }
 

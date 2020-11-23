@@ -21,15 +21,11 @@ namespace FastBioinfBot
             OnTurnError = async (turnContext, exception) =>
             {
                 // Log any leaked exception from the application.
-                logger.LogError(exception, $"[OnTurnError] unhandled error : {exception.Message}");
+                logger.LogError(exception, $"[OnTurnError] unhandled error : {exception.Message}{Environment.NewLine}{exception.StackTrace}");
 
                 // Send a message to the user
-                var errorMessageText = $"The bot encountered an error or bug: {exception.Message}";
+                var errorMessageText = $"Unhandled error: {exception.Message}";
                 var errorMessage = MessageFactory.Text(errorMessageText, errorMessageText, InputHints.ExpectingInput);
-                await turnContext.SendActivityAsync(errorMessage);
-
-                errorMessageText = "To continue to run this bot, please fix the bot source code.";
-                errorMessage = MessageFactory.Text(errorMessageText, errorMessageText, InputHints.ExpectingInput);
                 await turnContext.SendActivityAsync(errorMessage);
 
                 if (conversationState != null)

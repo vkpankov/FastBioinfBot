@@ -3,19 +3,19 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "appId": {
-            "value": ""
+            "value": "b427a361-d119-4eee-ac83-5019ee7e98d9"
         },
         "appSecret": {
-            "value": ""
+            "value": "67814352abC"
         },
         "botId": {
-            "value": ""
+            "value": "BioinfBot"
         },
         "botSku": {
-            "value": ""
+            "value": "F0"
         },
         "newAppServicePlanName": {
-            "value": ""
+            "value": "BioinfBotPlan"
         },
         "newAppServicePlanSku": {
             "value": {
@@ -27,13 +27,13 @@
             }
         },
         "appServicePlanLocation": {
-            "value": ""
+            "value": "South Central US"
         },
         "existingAppServicePlan": {
-            "value": ""
+            "value": "FastBioinfBot20201122203616Plan"
         },
         "newWebAppName": {
-            "value": ""
+            "value": "BioinfBotApp"
         }
     }
 }

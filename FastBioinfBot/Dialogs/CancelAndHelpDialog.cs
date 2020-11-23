@@ -13,7 +13,7 @@ namespace FastBioinfBot.Dialogs
 {
     public class CancelAndHelpDialog : ComponentDialog
     {
-        private const string HelpMsgText = "Show help here";
+        private const string HelpMsgText = "Sorry, we don't have a help yet. Please write to st040308@student.spbu.ru";
         private const string CancelMsgText = "Cancelling...";
 
         public CancelAndHelpDialog(string id)
@@ -36,6 +36,8 @@ namespace FastBioinfBot.Dialogs
         {
             if (innerDc.Context.Activity.Type == ActivityTypes.Message)
             {
+                if (innerDc.Context.Activity.Text == null)
+                    return null;
                 var text = innerDc.Context.Activity.Text.ToLowerInvariant();
 
                 switch (text)

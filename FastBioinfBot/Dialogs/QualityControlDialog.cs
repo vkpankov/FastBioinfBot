@@ -38,6 +38,7 @@ namespace FastBioinfBot.Dialogs
 
         private static async Task<DialogTurnResult> ProcessDataStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
+
             Attachment attachment = ((List<Attachment>)stepContext.Result)[0];
             var remoteFileUrl = attachment.ContentUrl;
             var localFileName = Path.Combine(Path.GetTempPath(), attachment.Name);
@@ -45,10 +46,13 @@ namespace FastBioinfBot.Dialogs
             {
                 webClient.DownloadFile(remoteFileUrl, localFileName);
             }
-            bool isProcessed = FastQCWrapper.ProcessFastqFile(localFileName, out string allResultsFileName, out string htmlResultsFileName);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Please wait. FastQC processing your file..."));
+
+            bool isProcessed = FastQCWrapper.ProcessFastqFile(localFileName, out string allResultsFileName, out string htmlResultsFileName, out string errorOutput);
             if (!isProcessed)
             {
-                Activity failReply = MessageFactory.Text($"FastQC fails to process file {localFileName}");
+                Activity failReply = MessageFactory.Text($"FastQC fails to process file {localFileName}. {Environment.NewLine}" +
+                    $"Error std output: {errorOutput}");
                 return await stepContext.EndDialogAsync(failReply);
             }
 

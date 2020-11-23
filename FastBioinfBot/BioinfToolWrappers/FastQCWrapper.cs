@@ -8,7 +8,7 @@ namespace FastBioinfBot.BioinfToolWrappers
 {
     internal static class FastQCWrapper
     {
-        public static bool ProcessFastqFile(string fileName, out string allResultsFileName, out string resultsInHtmlFileName)
+        public static bool ProcessFastqFile(string fileName, out string allResultsFileName, out string resultsInHtmlFileName, out string errorOutput)
         {
             var fastqcPath = "BioinformaticsTools/FastQC";
             var curdir = System.Environment.CurrentDirectory;
@@ -33,12 +33,14 @@ namespace FastBioinfBot.BioinfToolWrappers
             {
                 allResultsFileName = path +"\\" + Path.GetFileNameWithoutExtension(fileName) + "_fastqc.zip";
                 resultsInHtmlFileName = path + "\\" + Path.GetFileNameWithoutExtension(fileName) + "_fastqc.html";
+                errorOutput = "";
                 return true;
             }
             else
             {
                 allResultsFileName = "";
                 resultsInHtmlFileName = "";
+                errorOutput = $"{curdir}, {fastQCRun}, stdout";
                 return false;
             }
 

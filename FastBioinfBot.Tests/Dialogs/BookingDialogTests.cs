@@ -27,48 +27,5 @@ namespace FastBioinfBot.Tests.Dialogs
             _middlewares = new IMiddleware[] { new XUnitDialogTestLogger(output) };
         }
 
-        [Theory]
-        [MemberData(nameof(BookingDialogTestsDataGenerator.BookingFlows), MemberType = typeof(BookingDialogTestsDataGenerator))]
-        public async Task DialogFlowUseCases(TestDataObject testData)
-        {
-            // Arrange
-            var bookingTestData = testData.GetObject<BookingDialogTestCase>();
-            var sut = new BookingDialog();
-            var testClient = new DialogTestClient(Channels.Test, sut, bookingTestData.InitialBookingDetails, _middlewares);
-
-            // Execute the test case
-            Output.WriteLine($"Test Case: {bookingTestData.Name}");
-            for (var i = 0; i < bookingTestData.UtterancesAndReplies.GetLength(0); i++)
-            {
-                var reply = await testClient.SendActivityAsync<IMessageActivity>(bookingTestData.UtterancesAndReplies[i, 0]);
-                Assert.Equal(bookingTestData.UtterancesAndReplies[i, 1], reply?.Text);
-            }
-
-            var bookingResults = (BookingDetails)testClient.DialogTurnResult.Result;
-            Assert.Equal(bookingTestData.ExpectedBookingDetails?.Origin, bookingResults?.Origin);
-            Assert.Equal(bookingTestData.ExpectedBookingDetails?.Destination, bookingResults?.Destination);
-            Assert.Equal(bookingTestData.ExpectedBookingDetails?.TravelDate, bookingResults?.TravelDate);
-        }
-
-        [Theory]
-        [MemberData(nameof(BookingDialogTestsDataGenerator.CancelFlows), MemberType = typeof(BookingDialogTestsDataGenerator))]
-        public async Task ShouldBeAbleToCancelAtAnyTime(TestDataObject testData)
-        {
-            // Arrange
-            var bookingTestData = testData.GetObject<BookingDialogTestCase>();
-            var sut = new BookingDialog();
-            var testClient = new DialogTestClient(Channels.Test, sut, bookingTestData.InitialBookingDetails, _middlewares);
-
-            // Execute the test case
-            Output.WriteLine($"Test Case: {bookingTestData.Name}");
-            for (var i = 0; i < bookingTestData.UtterancesAndReplies.GetLength(0); i++)
-            {
-                var reply = await testClient.SendActivityAsync<IMessageActivity>(bookingTestData.UtterancesAndReplies[i, 0]);
-                Assert.Equal(bookingTestData.UtterancesAndReplies[i, 1], reply.Text);
-            }
-
-            Assert.Equal(DialogTurnStatus.Complete, testClient.DialogTurnResult.Status);
-            Assert.Null(testClient.DialogTurnResult.Result);
-        }
     }
 }

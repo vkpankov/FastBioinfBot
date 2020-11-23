@@ -18,11 +18,11 @@ namespace FastBioinfBot.BioinfToolWrappers
             string trimmomaticCmd = "";
             if (inputParams.Mode == "Single end")
             {
-                trimmomaticCmd = "";
+                trimmomaticCmd = $"-jar {trimmomaticPath}/trimmomatic-0.39.jar SE -phred33 \"{inputParams.ForwardReadsFileName}\" forward_paired.7z LEADING:{inputParams.Leading} TRAILING:{inputParams.Trailing} MINLEN:{inputParams.MinLen}";
             }
             else
             {
-                trimmomaticCmd = $"-jar {trimmomaticPath}/trimmomatic-0.39.jar PE {inputParams.ForwardReadsFileName} {inputParams.ReverseReadsFileName} forward_paired.7z forward_unpaired.7z reverse_paired.7z reverse_unpaired.7z LEADING:{inputParams.Leading} TRAILING:{inputParams.Trailing} MINLEN:{inputParams.MinLen}";
+                trimmomaticCmd = $"-jar {trimmomaticPath}/trimmomatic-0.39.jar PE ] {inputParams.ForwardReadsFileName} {inputParams.ReverseReadsFileName} forward_paired.7z forward_unpaired.7z reverse_paired.7z reverse_unpaired.7z LEADING:{inputParams.Leading} TRAILING:{inputParams.Trailing} MINLEN:{inputParams.MinLen}";
             }
             //$"-jar {trimmomaticPath}/trimmomatic-0.39.jar {mode} {forwardFileName} {reverseFileName} ";
             var processResult = new System.Diagnostics.Process()

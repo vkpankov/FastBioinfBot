@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace FastBioinfBot.Dialogs
 {
-    public class MainDialog : ComponentDialog
+    public class MainDialog : CancelAndHelpDialog
     {
         private readonly UserState _userState;
 
@@ -25,6 +25,8 @@ namespace FastBioinfBot.Dialogs
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new QualityControlDialog());
             AddDialog(new TrimmomaticDialog());
+            AddDialog(new BlastDialog());
+            AddDialog(new AssemblerDialog());
 
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
@@ -42,8 +44,12 @@ namespace FastBioinfBot.Dialogs
                 new PromptOptions
                 {
 
-                    Prompt = MessageFactory.Text("Please choose bioinformatics tool"),
-                    Choices = ChoiceFactory.ToChoices(new List<string> { "FastQC", "Trimmomatic" }),
+                    Prompt = MessageFactory.Text("Please choose bioinformatics tool\r\n" +
+                    "Use FastQC to do some quality control checks on raw sequence data\r\n" +
+                    "Use Trimmomatic to  perform trimming for illumina paired-end and single ended data\r\n" +
+                    "Use NCBI BLAST to find you sequence in NCBI nucleotides database\r\n" +
+                    "Use 'Build assembly' to build contigs (large sequences) from reads"),
+                    Choices = ChoiceFactory.ToChoices(new List<string> { "FastQC", "Trimmomatic", "NCBI BLAST", "Build assembly" }),
                 }, cancellationToken);
         }
 
@@ -59,6 +65,14 @@ namespace FastBioinfBot.Dialogs
                 case "Trimmomatic":
                     {
                         return await stepContext.BeginDialogAsync(nameof(TrimmomaticDialog), null, cancellationToken);
+                    }
+                case "NCBI BLAST":
+                    {
+                        return await stepContext.BeginDialogAsync(nameof(BlastDialog), null, cancellationToken);
+                    }
+                case "Build assembly":
+                    {
+                        return await stepContext.BeginDialogAsync(nameof(AssemblerDialog), null, cancellationToken);
                     }
                 default:
                     {
